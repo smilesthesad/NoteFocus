@@ -1,0 +1,36 @@
+/* body {
+  min-width: 800px;
+} */
+
+#editor {
+  min-width: 700px;
+  min-height: 500px;
+}
+
+#header {
+  text-align: center;
+  font-weight: 600;
+}
+
+#copy-tooltip > button {
+  background-color: black;
+  border: 1px solid grey;
+  color: aliceblue;
+  float: left;
+  min-width: 100px;
+  min-height: 50px;
+  font-size: larger;
+}
+
+#copy-tooltip > button:not(:last-child) {
+  border-right: none;
+}
+
+#copy-tooltip > button:hover {
+  background-color: rgb(34, 34, 34);
+  cursor: pointer;
+}
+
+#copy-tooltip > button {
+  border-radius: 5px;
+}
