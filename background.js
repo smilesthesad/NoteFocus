@@ -1,29 +1,11 @@
-// const isHover = (e) => e.parentElement.querySelector(":hover") === e;
+const fromContentScript = "from_content_script";
+const fromPopup = "from_popup";
+const messageQueue = [];
 
-// const myDiv = document.getElementById("mydiv");
-
-// const pullSelected = (e) => {
-//   console.log(window.getSelection());
-// };
-// document.addEventListener("DOMContentLoaded", function () {
-//   document.addEventListener("mousemove", pullSelected);
-// });
-
-// document.addEventListener("mousemove", function checkHover() {
-//   const hovered = isHover(myDiv);
-//   if (hovered !== checkHover.hovered) {
-//     console.log(hovered ? "hovered" : "not hovered");
-//     checkHover.hovered = hovered;
-//   }
-// });
-
-// const selection = () => {
-//   if (document.getSelection) {
-//     console.log(document.getSelection());
-//     return document.getSelection();
-//   }
-// };
-
-// console.log("hello");
-
-// let color = "#3aa757";
+chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
+  if (message.type === fromContentScript) {
+    messageQueue.push(message);
+  } else if (message.type === fromPopup) {
+    sendResponse(messageQueue);
+  }
+});

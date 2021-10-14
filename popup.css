@@ -4,6 +4,21 @@
 }
 
 #header {
-  text-align: center;
+  position: relative;
+  justify-content: center;
   font-weight: 600;
+}
+
+#note-helper-title {
+  text-align: center;
+}
+
+#clear-button {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-weight: 500;
+  font-size: large;
+  border: none;
+  background-color: #fab3b3;
 }
