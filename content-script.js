@@ -36,14 +36,10 @@ const copyText = async () => {
   curr = await getStorageValPromise(USERCONTENTKEY);
   console.log("clicked copy");
   console.log(`curr is ${curr}`);
+  closeTooltip();
 };
 
 const closeTooltip = (e) => {
-  console.log("closed");
-  // dont close the tooltip if they clicked on the copy button
-  if (e.target.id === "copy-button") {
-    return;
-  }
   $("#copy-tooltip").remove();
 };
 
@@ -70,7 +66,6 @@ const createTooltip = (e) => {
     position: "absolute",
     left: `${xAxis}px`,
     top: `${yAxis}px`,
-    click: copyText,
   });
   copyTooltip.attr("id", "copy-tooltip");
   copyTooltip.append(copyButton);
