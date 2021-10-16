@@ -2,6 +2,7 @@ const USERCONTENTKEY = "saved-content";
 let prevSelected = "";
 
 const getStorageValPromise = (key) => {
+  console.log("fetching vals");
   return new Promise((resolve) => {
     chrome.storage.sync.get(key, (res) => {
       resolve(res[USERCONTENTKEY] === undefined ? "" : res[USERCONTENTKEY]);
@@ -33,7 +34,7 @@ const copyText = async () => {
   );
   let curr;
   curr = await getStorageValPromise(USERCONTENTKEY);
-  console.log("testing");
+  console.log("clicked copy");
   console.log(`curr is ${curr}`);
 };
 
@@ -69,6 +70,7 @@ const createTooltip = (e) => {
     position: "absolute",
     left: `${xAxis}px`,
     top: `${yAxis}px`,
+    click: copyText,
   });
   copyTooltip.attr("id", "copy-tooltip");
   copyTooltip.append(copyButton);
@@ -76,5 +78,6 @@ const createTooltip = (e) => {
   $("body").append(copyTooltip);
   return;
 };
+
 document.addEventListener("mouseup", createTooltip);
 document.addEventListener("mousedown", closeTooltip);

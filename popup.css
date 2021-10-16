@@ -7,18 +7,30 @@
   position: relative;
   justify-content: center;
   font-weight: 600;
+  overflow: auto;
 }
 
 #note-helper-title {
   text-align: center;
 }
 
-#clear-button {
+#header > button {
   position: absolute;
-  top: 0;
-  right: 10px;
+  cursor: pointer;
   font-weight: 500;
   font-size: large;
+  padding: 5px;
+  border-radius: 4px;
   border: none;
+  top: 8px;
+}
+
+#clear-button {
+  right: 10px;
   background-color: #fab3b3;
+}
+
+#copy-button {
+  left: 10px;
+  background-color: #b9fab3;
 }

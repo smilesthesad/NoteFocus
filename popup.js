@@ -9,24 +9,47 @@ const options = {
 const getStorageValPromise = (key) => {
   return new Promise((resolve) => {
     chrome.storage.sync.get(key, (res) => {
-      console.log(res[USERCONTENTKEY]);
+      console.log("user content is", res[USERCONTENTKEY]);
       resolve(res[USERCONTENTKEY] === undefined ? "" : res[USERCONTENTKEY]);
     });
   });
 };
 
-chrome.storage.onChanged.addListener(async () => {
+const createQuill = async () => {
+  editor = new Quill("#editor", options);
   const curr = await getStorageValPromise(USERCONTENTKEY);
-  console.log(`curr in popup js is ${curr}`);
-  // editor.insertText(1, curr);
-});
+  editor.setText("");
+  editor.setText(curr);
+};
 
-setTimeout(() => {
-  editor = new Quill("#editor", { theme: "snow" });
-  let curr;
-  getStorageValPromise(USERCONTENTKEY);
-  console.log(curr);
-  // editor.insertText(0, "helloWorld");
-  // editor.insertText(1, curr);
-  console.log("editor started");
+$(() => {
+  createQuill();
+
+  $("#clear-button").on("click", () => {
+    console.log("cleared content in jqery");
+    chrome.storage.sync.set(
+      {
+        [USERCONTENTKEY]: "",
+      },
+      () => {
+        if (chrome.runtime.error) {
+          console.log("unable to clear content");
+        }
+      }
+    );
+    console.log("cleared content");
+    editor.setContents([]);
+  });
+
+  $("#copy-button").on("click", async () => {
+    console.log("copied text");
+    const text = await getStorageValPromise(USERCONTENTKEY);
+    navigator.clipboard.writeText(text);
+  });
+
+  chrome.storage.onChanged.addListener(async () => {
+    const curr = await getStorageValPromise(USERCONTENTKEY);
+    editor.setText("");
+    editor.setText(curr);
+  });
 });
