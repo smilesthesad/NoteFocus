@@ -10,7 +10,8 @@ const getStorageValPromise = (key) => {
   });
 };
 
-const copyText = async () => {
+const copyText = async (e) => {
+  console.log("copied text");
   let selected = window.getSelection().toString();
   if (selected === "") {
     return;
@@ -36,10 +37,15 @@ const copyText = async () => {
   curr = await getStorageValPromise(USERCONTENTKEY);
   console.log("clicked copy");
   console.log(`curr is ${curr}`);
-  closeTooltip();
+  closeTooltip(e, true);
 };
 
-const closeTooltip = (e) => {
+const closeTooltip = (e, forceClose = false) => {
+  // prevent closeTooltip from happening with the copy button
+  // until AFTER the copyText function is done running)
+  if (e.target.id === "copy-button" && !forceClose) {
+    return;
+  }
   $("#copy-tooltip").remove();
 };
 
@@ -71,6 +77,7 @@ const createTooltip = (e) => {
   copyTooltip.append(copyButton);
   copyTooltip.append(closeButton);
   $("body").append(copyTooltip);
+  console.log("created tooltip");
   return;
 };
 
