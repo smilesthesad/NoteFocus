@@ -2,7 +2,6 @@ const USERCONTENTKEY = "saved-content";
 let prevSelected = "";
 
 const getStorageValPromise = (key) => {
-  console.log("fetching vals");
   return new Promise((resolve) => {
     chrome.storage.sync.get(key, (res) => {
       resolve(res[USERCONTENTKEY] === undefined ? "" : res[USERCONTENTKEY]);
@@ -11,7 +10,6 @@ const getStorageValPromise = (key) => {
 };
 
 const copyText = async (e) => {
-  console.log("copied text");
   let selected = window.getSelection().toString();
   if (selected === "") {
     return;
@@ -19,24 +17,12 @@ const copyText = async (e) => {
   selected = selected.trim();
   let previous;
   previous = await getStorageValPromise(USERCONTENTKEY);
-  console.log(`selected is ${selected}`);
   const newContent = previous + selected + "\n";
-  chrome.storage.sync.set(
-    {
-      [USERCONTENTKEY]: newContent,
-    },
-    () => {
-      if (chrome.runtime.error) {
-        console.log("encountered runtime error");
-      } else {
-        console.log("Value set to", newContent);
-      }
-    }
-  );
+  chrome.storage.sync.set({
+    [USERCONTENTKEY]: newContent,
+  });
   let curr;
   curr = await getStorageValPromise(USERCONTENTKEY);
-  console.log("clicked copy");
-  console.log(`curr is ${curr}`);
   closeTooltip(e, true);
 };
 
