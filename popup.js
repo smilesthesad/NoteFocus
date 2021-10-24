@@ -2,6 +2,7 @@ let editor;
 
 const options = {
   theme: "snow",
+  readOnly: true,
 };
 const createQuill = () => {
   editor = new Quill("#editor", options);
@@ -27,10 +28,8 @@ const toggleExtension = async (e) => {
   const $this = $(e.currentTarget);
   if ($this.prop("checked")) {
     chrome.storage.sync.set({ [EXTENSIONENABLED]: true });
-    console.log(await getStorageValPromise(EXTENSIONENABLED));
   } else {
     chrome.storage.sync.set({ [EXTENSIONENABLED]: false });
-    console.log(await getStorageValPromise(EXTENSIONENABLED));
   }
 };
 
@@ -63,4 +62,12 @@ $(() => {
     editor.setText("");
     editor.setText(curr);
   });
+
+  // editor.on("text-change", function (delta, oldDelta) {
+  //   // TODO: RESOLVE DELTAS ON CLOSE OR SET DEBOUNCE FOR THIS EVENT.
+  //      CHROME RATE LIMITS CALLS TO CHROME STORAGE SYNC SET
+  //   chrome.storage.sync.set({
+  //     [USERCONTENTKEY]: editor.getText(),
+  //   });
+  // });
 });
