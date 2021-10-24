@@ -1,13 +1,4 @@
-const USERCONTENTKEY = "saved-content";
 let prevSelected = "";
-
-const getStorageValPromise = (key) => {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(key, (res) => {
-      resolve(res[USERCONTENTKEY] === undefined ? "" : res[USERCONTENTKEY]);
-    });
-  });
-};
 
 const copyText = async (e) => {
   let selected = window.getSelection().toString();
@@ -21,8 +12,7 @@ const copyText = async (e) => {
   chrome.storage.sync.set({
     [USERCONTENTKEY]: newContent,
   });
-  let curr;
-  curr = await getStorageValPromise(USERCONTENTKEY);
+
   closeTooltip(e, true);
 };
 
@@ -35,7 +25,15 @@ const closeTooltip = (e, forceClose = false) => {
   $("#copy-tooltip").remove();
 };
 
-const createTooltip = (e) => {
+const createTooltip = async (e) => {
+  // if extension toggle is off, dont create tooltip
+  console.log("creating tooltip...");
+  const extensionEnabled = await getStorageValPromise(EXTENSIONENABLED);
+  console.log(extensionEnabled);
+  if (!extensionEnabled) {
+    console.log("returning ");
+    return;
+  }
   const selected = window.getSelection().toString();
   // if there is no selected text, dont add anything to the doc
   if (selected === "" || prevSelected === selected) {
@@ -63,7 +61,6 @@ const createTooltip = (e) => {
   copyTooltip.append(copyButton);
   copyTooltip.append(closeButton);
   $("body").append(copyTooltip);
-  console.log("created tooltip");
   return;
 };
 
